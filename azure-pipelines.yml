@@ -1,0 +1,27 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- script: mvn clean package
+  displayName: 'build'
+
+- script: archiveArtifacts artifacts:'target/*.war',fingerprint:true
+  displayName: 'archiveing'
+
+- script: mvn clean package
+  displayName: 'deploaying'
+
+- script: ansible-playbook ansible/playbook.yml -i ansible/hosts.ini
+  displayName: 'deploy'
+
